@@ -12,6 +12,7 @@ env__/
 .vscode/symbols.json
 .idea
 venv/
+venv
 
 app/static/assets/node_modules
 app/static/assets/yarn.lock
