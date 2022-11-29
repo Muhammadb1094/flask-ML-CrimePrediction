@@ -14,30 +14,45 @@
 
     {% include 'navigation.html' %}
 
-    <main>
+    <main class="container-fluid">
 
-        <div class="px-4 py-5 my-5 text-center">
-            <h1>Welcome to Dashboard, ML Flask Project</h1>
+        <div class="px-4 py-5 my-5 text-center bg-light">
+            <h1>Welcome to ML-Flask Crime Prediction App</h1>
         </div>
-        <div class="px-4 py-5 my-5 text-center">
-            <h4>Import Excel Data and get your visualization charts</h4>
-        </div>
+
          <div class="row justify-content-center">
-
-                    <form class="form-group col-lg-4 border p-3" action="/import-data/" method="post"
+                    <form class="form-group col-lg-4 border p-3" action="/import-web-view/" method="post"
                           enctype = "multipart/form-data">
 
-                      <label for="formFileSm" class="form-label h6">Import data set</label>
+                      <label for="formFileSm" class="form-label h6">Import data set:</label>
                         <input class="form-control form-control-sm" name="excelsheet" type="file"  required/>
+                        <hr>
+                       <h6 class="p-2 bord">What would you like to see?</h6>
+                        <div class="form-check p-3">
+                          <div>
+                               <input class="form-check-input" type="checkbox" name="convicting_offence">
+                              <label class="form-check-label">Convicting Offense Classification?</label>
+                          </div>
+
+                          <div>
+                               <input class="form-check-input" type="checkbox" name="age_release">
+                               <span class="form-check-label">Age At Release?</span>
+                          </div>
+                          <div>
+                               <input class="form-check-input" type="checkbox" name="not_released">
+                               <span class="form-check-label">Age at release of people who didn't return?</span>
+                          </div>
+                       </div>
                         <div class="text-center text-danger">
                             {% if msg %}
                                 {{ msg }}
                             {% endif %}
                             <br>
-                            <input type="submit" value="Save" class="btn btn-outline-primary mt-3 px-3">
+                            <input type="submit" value="Show" class="btn btn-outline-primary mt-3 px-3">
                         </div>
                     </form>
-            </div>
+         </div>
+        <br><br><br><br><br><br>
     </main>
 
     {% include 'footer.html' %}
