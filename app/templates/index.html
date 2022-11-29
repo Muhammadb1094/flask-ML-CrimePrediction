@@ -17,8 +17,27 @@
     <main>
 
         <div class="px-4 py-5 my-5 text-center">
-            <h1>Welcome to Dashboard, ML Flask Project is in Progress</h1>
+            <h1>Welcome to Dashboard, ML Flask Project</h1>
         </div>
+        <div class="px-4 py-5 my-5 text-center">
+            <h4>Import Excel Data and get your visualization charts</h4>
+        </div>
+         <div class="row justify-content-center">
+
+                    <form class="form-group col-lg-4 border p-3" action="/import-data/" method="post"
+                          enctype = "multipart/form-data">
+
+                      <label for="formFileSm" class="form-label h6">Import data set</label>
+                        <input class="form-control form-control-sm" name="excelsheet" type="file"  required/>
+                        <div class="text-center text-danger">
+                            {% if msg %}
+                                {{ msg }}
+                            {% endif %}
+                            <br>
+                            <input type="submit" value="Save" class="btn btn-outline-primary mt-3 px-3">
+                        </div>
+                    </form>
+            </div>
     </main>
 
     {% include 'footer.html' %}

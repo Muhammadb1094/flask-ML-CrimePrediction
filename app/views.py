@@ -1,11 +1,9 @@
-import os, logging
-
-# Flask modules
+import os
 from flask import render_template, request, url_for, redirect, send_from_directory
-from flask_login import login_user, logout_user, current_user, login_required
-from werkzeug.exceptions import HTTPException, NotFound, abort
+from flask_login import login_user, logout_user, current_user
 from jinja2 import TemplateNotFound
-
+import pandas as pd
+from .ml_recidivism import GetDataVisualizations
 # App modules
 from app import app, lm, db, bc
 from app.models import Users
@@ -31,40 +29,21 @@ def import_data():
     msg = None
     success = False
 
-    if request.method == 'GET': 
-
+    if request.method == 'GET':
         return render_template('import_data.html', msg=msg )
 
-    # check if both http method is POST and form is valid on submit
-    # if form.validate_on_submit():
-    #
-    #     # assign form data to variables
-    #     username = request.form.get('username', '', type=str)
-    #     password = request.form.get('password', '', type=str)
-    #     email = request.form.get('email', '', type=str)
-    #
-    #     # filter User out of database through username
-    #     user = Users.query.filter_by(user=username).first()
-    #
-    #     # filter User out of database through username
-    #     user_by_email = Users.query.filter_by(email=email).first()
-    #
-    #     if user or user_by_email:
-    #         msg = 'Error: User exists!'
-    #
-    #     else:
-    #
-    #         pw_hash = bc.generate_password_hash(password)
-    #
-    #         user = Users(username, email, pw_hash)
-    #
-    #         user.save()
-    #
-    #         msg = 'User created, please <a href="' + url_for('login') + '">login</a>'
-    #         success = True
-
+    if request.method == 'POST':
+        excel_sheet = request.files["excelsheet"]
+        if excel_sheet:
+            data = pd.read_csv(excel_sheet, error_bad_lines=False)
+            visualizer = GetDataVisualizations()
+            visualizer.live_visualization(data)
+            return render_template('import_data.html', msg=msg)
+        else:
+            msg = "Excel sheet Required"
+        return render_template('import_data.html', msg=msg, success=success)
     else:
-        msg = 'Input error'     
+        msg = 'Input error'
 
     return render_template('import_data.html', msg=msg, success=success)
 
