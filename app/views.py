@@ -38,6 +38,7 @@ def import_data():
             visualizer.convicting_offense(data)
             visualizer.age_at_release(data)
             visualizer.who_didnt_return(data)
+            visualizer.algo_accuracy()
 
             return render_template('import_data.html', images=get_new_files())
 
@@ -151,6 +152,9 @@ def web_view():
                     visualizer.convicting_offense(data)
                 if request.form.get("age_release", False):
                     visualizer.age_at_release(data)
+
+                if request.form.get("accuracy", False):
+                    visualizer.algo_accuracy()
 
                 if request.form.get("not_released", False):
                     visualizer.who_didnt_return(data)
