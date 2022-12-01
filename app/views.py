@@ -2,10 +2,11 @@ import os
 from flask import render_template, request, url_for, redirect, send_from_directory
 from flask_login import login_user, logout_user, current_user
 import pandas as pd
-from .ml_recidivism import GetDataVisualizations
+from .ml_recidivism import GetDataVisualizations, GetImageDataVisualizations
 from app import app, lm, bc
 from app.models import Users
 from app.forms import LoginForm, RegisterForm
+from .utilities import remove_old_files, get_new_files
 
 
 @lm.user_loader
@@ -25,26 +26,21 @@ def import_data():
     success = False
 
     if request.method == 'GET':
+        remove_old_files()
         return render_template('import_data.html', msg=msg)
 
     if request.method == 'POST':
         excel_sheet = request.files["excelsheet"]
         if excel_sheet:
             data = pd.read_csv(excel_sheet, error_bad_lines=False)
-            visualizer = GetDataVisualizations()
+            visualizer = GetImageDataVisualizations()
 
-            if request.form.get("convicting_offence", False):
-                visualizer.convicting_offense(data)
-                return render_template('import_data.html', msg=msg)
-            if request.form.get("age_release", False):
-                visualizer.age_at_release(data)
-                return render_template('import_data.html', msg=msg)
-            if request.form.get("not_released", False):
-                visualizer.who_didnt_return(data)
-                return render_template('import_data.html', msg=msg)
+            visualizer.convicting_offense(data)
+            visualizer.age_at_release(data)
+            visualizer.who_didnt_return(data)
 
-            msg = "Select at least one option!"
-            return render_template('import_data.html', msg=msg)
+            return render_template('import_data.html', images=get_new_files())
+
         else:
             msg = "Excel sheet Required"
         return render_template('import_data.html', msg=msg, success=success)
